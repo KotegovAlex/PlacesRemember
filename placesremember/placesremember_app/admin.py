@@ -1,3 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Place
+
+
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'user_id', 'photo', 'time_create')
+    list_display_links = ('id', 'title')
+    search_fields = ('title',)
+
+
+admin.site.register(Place, PlaceAdmin)

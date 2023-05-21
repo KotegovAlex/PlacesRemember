@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ title }}: {{ place.name }}</h1>
+    {% if place.photo %}
+        <p><img class="img-article-left thumb" src="{{ place.photo.url }}"></p>
+    {% endif %}
+<p>{{ place.content }}</p>
+{% endblock %}
