@@ -1,6 +1,73 @@
 {% extends 'base.html' %}
 
+{% load socialaccount %}
+
 {% block content %}
-<h1>{{ title }}</h1>
-<p>Content</p>
+{% get_providers as socialaccount_providers %}
+
+{% if not request.user.is_authenticated %}
+    <div class="container-item">
+        <br>
+        <h1>Project Places Remember</h1>
+        <br>
+        <h3>Places Remember is a service for saving your memories.
+
+            You can add entries about your big and small trips,
+            with photos and your impressions,
+            so that you can return to them later</h3>
+        <br>
+    </div>
+    <div class="container-item">
+        <br>
+        <h2>You are not authorized! Sign with:</h2>
+        <form class="form-submit-btn m-t-17" action="{% url 'account_login' %}">
+            <button class="submit-btn">Vkontakte</button>
+        </form>
+        <br>
+        <h2> OR use PlacesRemember account: </h2>
+        <br>
+        <form class="form-submit-btn m-t-17" action="{% url 'login' %}">
+            <button class="submit-btn">Sign In</button>
+        </form>
+    </div>
+    <div class="w-full text-center p-t-55">
+        <span class="txt2">Not a member?</span>
+        <a class="txt2 bo1" href="{% url 'register' %}" > Sign up now </a>
+    </div>
+{% else %}
+    <div class="container-item">
+
+    </div>
+
+    <ul class="list-places">
+        {% if not places %}
+        <div class="container-item">
+            <br>
+            <h3>There are no memories, let's create one</h3>
+            <form class="form-add-place-btn m-t-17" action="{% url 'add_place' %}">
+                <button class="add-place-btn">+Add Place</button>
+            </form>
+        </div>
+        {% else %}
+            <h1>My memories</h1>
+            <form class="form-add-place-btn m-t-17" action="{% url 'add_place' %}">
+                <button class="add-place-btn">+Add Place</button>
+            </form>
+            {% for place in places %}
+                <li><h2>{{ place.title }}</h2>
+                {% if place.photo %}
+                    <p><img class="img-article-left thumb" src="{{ place.photo.url }}"></p>
+                {% endif %}
+                {{ place.time_create }}
+                <br>
+                {{ place.content|linebreaks|truncatewords:30}}
+                <div class="clear"></div>
+                <form class="form-show-place-btn m-t-17" action="{{ place.get_absolute_url }}">
+                    <button class="show-place-btn">View</button>
+                </form>
+                </li>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+</ul>
 {% endblock %}

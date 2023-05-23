@@ -4,28 +4,29 @@
 <html lang="en">
 <head>
     <title>{{ title }}</title>
-	<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 
-            {% block mainmenu %}
-            <div class="header">
-                <ul id="mainmenu" class="mainmenu">
-                    {% for tab in menu %}
-                    <li><a href="{% url tab.url_name %}">{{ tab.title }}</a></li>
-                    {% endfor %}
-                    {% if request.user.is_authenticated %}
-                        <li class="last"> {{ user.username }} | <a href="{% url 'logout' %}">Log Out</a></li>
-                    {% else %}
-                        <li class="last"><a href="{% url 'register' %}">Sign Up</a> | <a href="{% url 'login' %}">Sign In</a></li>
-                    {% endif %}
-                </ul>
-                <div class="clear"></div>
-            </div>
-            {% endblock mainmenu %}
+{% block mainmenu %}
+<div class="header">
+    <ul id="mainmenu" class="mainmenu">
+        {% for tab in menu %}
+            <li><a href="{% url tab.url_name %}">{{ tab.title }}</a></li>
+        {% endfor %}
+        {% if request.user.is_authenticated %}
+            {% if not user.first_name %}
+                <li class="last"> {{ user.username }} | <a href="{% url 'account_logout' %}">Log Out</a></li>
+            {% else %}
+                <li class="last"> {{ user.first_name }} | <a href="{% url 'account_logout' %}">Log Out</a></li>
+            {% endif %}
+        {% endif %}
 
-
+    </ul>
+    <div class="clear"></div>
+</div>
+{% endblock mainmenu %}
 
 {% block content %}
 {% endblock %}

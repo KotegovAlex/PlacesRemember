@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<form action="{% url 'add_place' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container-item">
+    <h1>{{ title }}</h1>
+    <form class="form" action="{% url 'add_place' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-    <div class="form-error">{{ form.non_field_errors }}</div>
+           <div class="form-error">{{ form.non_field_errors }}</div>
 
-    {% for field in form %}
-        <p><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</p>
-        <div class="form-error">{{ field.errors }}</div>
-    {% endfor %}
+            {% for field in form %}
+                <p><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</p>
+                <div class="form-error">{{ field.errors }}</div>
+            {% endfor %}
 
-    <button type="submit">Add</button>
-</form>
+        <button class="submit-btn" type="submit">Add</button>
+
+
+    </form>
+    </div>
 {% endblock %}

@@ -11,14 +11,24 @@ from placesremember_app.models import Place
 from placesremember_app.utils import DataMixin
 
 menu = [
+    {'title': 'Main Page', 'url_name': 'home'},
     {'title': 'About', 'url_name': 'about'},
-    {'title': 'Login', 'url_name': 'login'},
 ]
 
 
-def index(request):
-    """Home page"""
-    return render(request, 'index.html', {'menu': menu, 'title': 'Main Page'})
+class Home(DataMixin, ListView):
+    """View class to display authorized user places"""
+    model = Place
+    template_name = 'index.html'
+    context_object_name = 'places'
+
+    def get_queryset(self):
+        return Place.objects.filter(user_id=self.request.user.pk)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_data = self.get_user_context(title='Main Page', user_id=1)
+        return dict(list(context.items()) + list(user_data.items()))
 
 
 def about(request):
@@ -26,34 +36,24 @@ def about(request):
     return render(request, 'about.html', {'menu': menu, 'title': 'About'})
 
 
-class AuthUserPlaces(DataMixin, ListView):
-    """View class to display authorized user places"""
-    model = Place
-    template_name = 'places.html'
-    context_object_name = 'places'
-    allow_empty = False
-
-    def get_queryset(self):
-        return Place.objects.filter(user_id=1)
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_data = self.get_user_context(title='Places', user_id=1)
-        return dict(list(context.items()) + list(user_data.items()))
-
-
 class AddPlace(LoginRequiredMixin, DataMixin, CreateView):
     """View class to create new place by authorized user"""
     form_class = AddPlaceForm
     template_name = 'add_place.html'
-    success_url = reverse_lazy('places')
-    login_url = reverse_lazy('places')
+    success_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
     raise_exception = True
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         user_data = self.get_user_context(title='Add Place')
         return dict(list(context.items()) + list(user_data.items()))
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user_id = self.request.user
+        self.object.save()
+        return super(AddPlace, self).form_valid(form)
 
 
 class LoginUser(DataMixin, LoginView):
@@ -62,11 +62,11 @@ class LoginUser(DataMixin, LoginView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_data = self.get_user_context(title='Authorization')
+        user_data = self.get_user_context(title='Sign In')
         return dict(list(context.items()) + list(user_data.items()))
 
     def get_success_url(self):
-        return reverse_lazy('places')
+        return reverse_lazy('home')
 
 
 class RegisterUser(DataMixin, CreateView):
@@ -83,7 +83,7 @@ class RegisterUser(DataMixin, CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('places')
+        return redirect('home')
 
 
 class ShowPlace(DataMixin, DetailView):
@@ -101,7 +101,7 @@ class ShowPlace(DataMixin, DetailView):
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return redirect('home')
 
 
 def pageNotFound(request, exception):

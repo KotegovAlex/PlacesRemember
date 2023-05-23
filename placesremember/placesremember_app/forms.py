@@ -12,7 +12,7 @@ class AddPlaceForm(forms.ModelForm):
 
     class Meta:
         model = Place
-        fields = ['title', 'content', 'photo', 'user_id']
+        fields = ['title', 'content', 'photo']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'cols': 60, 'rows': 10}),

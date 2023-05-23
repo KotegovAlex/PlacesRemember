@@ -7,3 +7,4 @@ flake8-import-order
 flake8-variables-names
 pre-commit
 django
+pillow
