@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
+{% load account %}
+
 
 {% block content %}
-<h1>{{ title }}: {{ place.name }}</h1>
-    {% if place.photo %}
-        <p><img class="img-article-left thumb" src="{{ place.photo.url }}"></p>
-    {% endif %}
-<p>{{ place.content }}</p>
+{% if request.user.id == place.user_id_id %}
+    <h1>{{ title }}: {{ place.name }}{{ request.user.id }}</h1>
+        {% if place.photo %}
+            <p><img class="img-article-left thumb" src="{{ place.photo.url }}"></p>
+        {% endif %}
+    <p>{{ place.content }}</p>
+{% else %}
+    <div class="container-item">
+        <h1>You have no access to this post!</h1>
+        <form class="form-submit-btn m-t-17" action="{% url 'home' %}">
+            <button class="submit-btn">Go to Main</button>
+        </form>
+    </div>
+{% endif %}
 {% endblock %}

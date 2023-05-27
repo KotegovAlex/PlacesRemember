@@ -20,8 +20,8 @@
     <div class="container-item">
         <br>
         <h2>You are not authorized! Sign with:</h2>
-        <form class="form-submit-btn m-t-17" action="{% url 'account_login' %}">
-            <button class="submit-btn">Vkontakte</button>
+        <form class="form-vk-btn m-t-17" action="/accounts/vk/login/?process=login">
+            <button class="vk-btn" type="submit"><img src="static/img/VK_Logo.png" alt="VK" height="50" width="50">VKontakte</button>
         </form>
         <br>
         <h2> OR use PlacesRemember account: </h2>
@@ -35,24 +35,18 @@
         <a class="txt2 bo1" href="{% url 'register' %}" > Sign up now </a>
     </div>
 {% else %}
-    <div class="container-item">
-
-    </div>
 
     <ul class="list-places">
-        {% if not places %}
-        <div class="container-item">
-            <br>
-            <h3>There are no memories, let's create one</h3>
-            <form class="form-add-place-btn m-t-17" action="{% url 'add_place' %}">
-                <button class="add-place-btn">+Add Place</button>
-            </form>
-        </div>
-        {% else %}
             <h1>My memories</h1>
             <form class="form-add-place-btn m-t-17" action="{% url 'add_place' %}">
                 <button class="add-place-btn">+Add Place</button>
             </form>
+        {% if not places %}
+            <div class="container-item">
+                <br>
+                <h3>There are no memories, let's create one</h3>
+            </div>
+        {% else %}
             {% for place in places %}
                 <li><h2>{{ place.title }}</h2>
                 {% if place.photo %}
