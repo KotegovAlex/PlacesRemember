@@ -8,4 +8,17 @@
     <br>
     <p>user@example.com</p>
 </div>
+<div id="map" style="width: 100%; height: 400px; margin-top: 100px;"></div>
+<script type="text/javascript">
+    DG.then(function() {
+        var map = DG.map('map', {
+            center: [56.835059270477615, 60.612259137392066],
+            zoom: 10
+        });
+
+        DG.marker([56.835059270477615, 60.612259137392066])
+            .addTo(map)
+            .bindPopup('{{ place.title }}');
+    });
+</script>
 {% endblock %}

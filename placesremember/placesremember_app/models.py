@@ -11,6 +11,8 @@ class Place(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Creation Time')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Change Time')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, verbose_name='User ID')
+    lon = models.FloatField(default=0.0)
+    lat = models.FloatField(default=0.0)
 
     def __str__(self):
         return f'{self.title}'

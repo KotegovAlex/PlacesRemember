@@ -32,7 +32,7 @@ img.img-article-left {
 }
 
 img.img-article-left.thumb {
-	max-width: 150px;
+	max-width: 300px;
 	height: auto;
 }
 
@@ -428,4 +428,12 @@ padding-right: 10
 
 .p-t-55 {
     padding-top: 10px;
+}
+
+.geo-tag {
+    position: relative;
+    left: 10px;
+    top: 190px;
+    width: 600px;
+    border: 2px solid #ccc;
 }

@@ -4,11 +4,30 @@
 
 {% block content %}
 {% if request.user.id == place.user_id_id %}
-    <h1>{{ title }}: {{ place.name }}{{ request.user.id }}</h1>
+    <div class="show-place">
+       <h1 style="margin-left: 10px;">{{ place.title }}</h1>
         {% if place.photo %}
-            <p><img class="img-article-left thumb" src="{{ place.photo.url }}"></p>
+            <div class="place-photo">
+                <p><img class="img-article-left thumb" src="{{ place.photo.url }}"></p>
+            </div>
         {% endif %}
-    <p>{{ place.content }}</p>
+        <p>{{ place.content }}</p>
+    </div>
+    <br>
+
+    <div id="map" style="width: 600px; height: 400px; position: relative; margin-top: 200px; margin-left: 10px;"></div>
+    <script type="text/javascript">
+        DG.then(function() {
+            var map = DG.map('map', {
+                center: [{{ place.lat }}, {{ place.lon }}],
+                zoom: 10
+            });
+
+            DG.marker([{{ place.lat }}, {{ place.lon }}])
+                .addTo(map)
+                .bindPopup('{{ place.title }}');
+        });
+    </script>
 {% else %}
     <div class="container-item">
         <h1>You have no access to this post!</h1>

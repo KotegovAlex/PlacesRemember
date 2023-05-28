@@ -33,7 +33,13 @@ class Home(DataMixin, ListView):
 
 def about(request):
     """About site page"""
-    return render(request, 'about.html', {'menu': menu, 'title': 'About'})
+
+    context = {
+        'menu': menu,
+        'title': 'About',
+    }
+
+    return render(request, 'about.html', context)
 
 
 class AddPlace(LoginRequiredMixin, DataMixin, CreateView):
