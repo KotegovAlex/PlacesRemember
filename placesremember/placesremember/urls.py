@@ -8,7 +8,7 @@ from placesremember_app.views import pageNotFound
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('accounts/', include('allauth.urls')),
+    path("accounts/", include("allauth.urls")),
     path("", include("placesremember_app.urls")),
 ]
 

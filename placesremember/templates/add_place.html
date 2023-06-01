@@ -5,13 +5,37 @@
     <h1>{{ title }}</h1>
     <form class="form" action="{% url 'add_place' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        <div class="form-error">{{ form.non_field_errors }}</div>
+        {% for field in form %}
+            <p><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</p>
+            <div class="form-error">{{ field.errors }}</div>
+            {% if field == lat %}
+                <input type="hidden" name="lat" value="0.0" step="any" required="" id="id_lat">
+                <input type="hidden" name="lon" value="0.0" step="any" required="" id="id_lon">
+            {% endif %}
+        {% endfor %}
 
-           <div class="form-error">{{ form.non_field_errors }}</div>
+        <h2>Mark the place on the map:</h2>
+        <div id="map" style="width: 600px; height: 400px; margin-top: 10px;"></div>
 
-            {% for field in form %}
-                <p><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</p>
-                <div class="form-error">{{ field.errors }}</div>
-            {% endfor %}
+        <script>
+            let inputLat = document.querySelector('#id_lat');
+            let inputLon = document.querySelector('#id_lon');
+            DG.then(function() {
+                var map = DG.map('map', {
+                    center: [56.835059270477615, 60.612259137392066],
+                    zoom: 10
+                });
+
+
+                map.on('click', (event) => {
+                    inputLat.value = event.latlng.lat
+                    inputLon.value = event.latlng.lng
+                    marker = DG.marker([inputLat.value, inputLon.value])
+                    .addTo(map)
+                })
+            });
+        </script>
 
         <button class="submit-btn" type="submit">Add</button>
 

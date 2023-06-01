@@ -16,7 +16,7 @@
     <br>
 
     <div id="map" style="width: 600px; height: 400px; position: relative; margin-top: 200px; margin-left: 10px;"></div>
-    <script type="text/javascript">
+    <script>
         DG.then(function() {
             var map = DG.map('map', {
                 center: [{{ place.lat }}, {{ place.lon }}],
@@ -27,6 +27,8 @@
                 .addTo(map)
                 .bindPopup('{{ place.title }}');
         });
+
+
     </script>
 {% else %}
     <div class="container-item">
